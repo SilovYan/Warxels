@@ -15,11 +15,12 @@ namespace GameLogic.Helper
                 fname = Path.Combine(path, fname);
             }
             var builder = new StringBuilder();
-            for (int i = 0; i < world.Width; i++)
+            for (int i = 0; i < world.Length; i++)
             {
-                for (int j = 0; j <world.Length; j++)
+                for (int j = 0; j < world.Width; j++)
                 {
-                    builder.Append(GetTerrainView((TerrainType)world.Terrain[i, j]));
+                    var terrainType = world.GetTerrainType(i, j);
+                    builder.Append(GetTerrainView(terrainType));
                 }
 
                 builder.Append(Environment.NewLine);
@@ -30,11 +31,11 @@ namespace GameLogic.Helper
         public static void SaveUnits(this IWorld world, string fname, bool android = false)
         {
             var builder = new StringBuilder();
-            for (int i = 0; i < world.Width; i++)
+            for (int i = 0; i < world.Length; i++)
             {
-                for (int j = 0; j < world.Length; j++)
+                for (int j = 0; j < world.Width; j++)
                 {
-                    builder.Append(GetUnitView(world.Army.GetUnit(j, i)));
+                    builder.Append(GetUnitView(world.Army.GetUnit(i,j)));
                 }
 
                 builder.Append(Environment.NewLine);
@@ -88,24 +89,24 @@ namespace GameLogic.Helper
             var WorldGen = WorldsGenerator.GetDefault(height, width);
             var World = WorldGen.GetWorld();
 
-            int x = 0;
+            int y = 0;
 
             foreach (var line in lines)
             {
-                int y = 0;
-                if (x >= World.Width)
+                int x = 0;
+                if (x >= World.Length)
                     break;
 
                 foreach (var c in line)
                 {
-                    if (y >= World.Length)
+                    if (x >= World.Width)
                         break;
 
                     if (c == 'm')
-                        World.Terrain[x, y] = 1;
-                    y++;
+                        WorldGen.SetTerrain(y, x, TerrainType.Marsh);
+                    x++;
                 }
-                x++;
+                y++;
             }
 
             return WorldGen;
@@ -129,17 +130,17 @@ namespace GameLogic.Helper
             var world = worldGen.GetWorld();
             world.Army.Clear();
 
-            int x = 0;
+            int y = 0;
 
             foreach (var line in lines)
             {
-                int y = 0;
-                if (x >= world.Width)
+                int x = 0;
+                if (y >= world.Width)
                     break;
 
                 foreach (var c in line)
                 {
-                    if (y >= world.Length)
+                    if (x >= world.Length)
                         break;
                     
                     switch (c)
@@ -153,9 +154,9 @@ namespace GameLogic.Helper
                         case ' ': break;
                         default: throw new InvalidOperationException("Unknown unit type " + c);
                     }
-                    y++;
+                    x++;
                 }
-                x++;
+                y++;
             }
         }
     }

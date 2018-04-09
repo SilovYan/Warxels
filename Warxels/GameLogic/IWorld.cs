@@ -14,9 +14,7 @@
 
         IEnumerable<IProjectile> GetProjectiles();
 
-        byte[,] Terrain { get; }
-
-        void SetTerrain(int y, int x, int width, int height, byte terrainType);
+        TerrainType GetTerrainType(int y, int x);
         
     }
 }

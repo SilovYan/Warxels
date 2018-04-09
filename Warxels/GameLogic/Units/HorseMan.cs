@@ -14,12 +14,12 @@
 
         public override int MoveCost => 5;
 
-        public override float GetTerrainPenalty(byte terrainId)
+        public override float GetTerrainPenalty(TerrainType terrainType)
         {
-            if (terrainId == 1)
+            if (terrainType == TerrainType.Marsh)
                 return 2.5f;
 
-            return base.GetTerrainPenalty(terrainId);
+            return base.GetTerrainPenalty(terrainType);
         }
     }
 }

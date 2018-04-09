@@ -77,25 +77,28 @@ namespace GameLogic
             return unit;
         }
 
+        public void AddPresetUnits()
+        {
+            float dx = _world.Width / 512.0f;
+            float dy = _world.Length / 512.0f;
+
+            AddUnitSquare(Team.Blue, 2, 50 * dx, 60 * dx, 40 * dy, UnitType.HorseMan, 150);
+            AddUnitSquare(Team.Blue, 2, 380 * dx, 60 * dx, 40 * dy, UnitType.HorseMan, 150);
+
+            AddUnitSquare(Team.Blue, 5, 130 * dx, 100 * dx, 40 * dy, UnitType.Archer, 200);
+            AddUnitSquare(Team.Blue, 5, 270 * dx, 100 * dx, 40 * dy, UnitType.Archer, 200);
+
+            AddUnitSquare(Team.Blue, 90 * dy, 100 * dx, 100 * dx, 50 * dy, UnitType.SwordsMan, 400);
+            AddUnitSquare(Team.Blue, 90 * dy, 300 * dx, 100 * dx, 50 * dy, UnitType.SwordsMan, 400);
+
+            AddUnitSquare(Team.Blue, 50 * dy, 220 * dx, 60 * dx, 150 * dy, UnitType.SwordsMan, 200);
+        }
+
         public static WorldsGenerator CreatePreset(int sizeY, int sizeX)
         {
             var world = Game.GenerateWorld(sizeY, sizeX);
-
-            float dx = sizeX / 512.0f;
-            float dy = sizeY / 512.0f;
             var gen = new WorldsGenerator(world, sizeY);
-            gen.AddUnitSquare(Team.Blue, 2, 50 * dx, 60 * dx, 40 * dy, UnitType.HorseMan, 150);
-            gen.AddUnitSquare(Team.Blue, 2, 380 * dx, 60 * dx, 40 * dy, UnitType.HorseMan, 150);
-
-            gen.AddUnitSquare(Team.Blue, 5, 130 * dx, 100 * dx, 40 * dy, UnitType.Archer, 200);
-            gen.AddUnitSquare(Team.Blue, 5, 270 * dx, 100 * dx, 40 * dy, UnitType.Archer, 200);
-
-            gen.AddUnitSquare(Team.Blue, 90 * dy, 100 * dx, 100 * dx, 50 * dy, UnitType.SwordsMan, 400);
-            gen.AddUnitSquare(Team.Blue, 90 * dy, 300 * dx, 100 * dx, 50 * dy, UnitType.SwordsMan, 400);
-
-            gen.AddUnitSquare(Team.Blue, 50 * dy, 220 * dx, 60 * dx, 150 * dy, UnitType.SwordsMan, 200);
-
-
+            gen.AddPresetUnits();
             return gen;
 
         }
@@ -153,5 +156,24 @@ namespace GameLogic
         {
             _world.Army.Clear();
         }
+
+        public void SetTerrain(int y, int x, int y1, int x1, TerrainType terrainType)
+        {
+            if (x < 0)
+                x = 0;
+
+            if (y < 0)
+                y = 0;
+
+            for (int i = x; i < x1 && i < _world.Width; i++)
+                for (int j = y; j < y1 && j < _world.Length; j++)
+                    _world.Terrain[i, j] = terrainType;
+        }
+
+        public void SetTerrain(int y, int x, TerrainType terrainType)
+        {
+            _world.Terrain[x, y] = terrainType;
+        }
+
     }
 }

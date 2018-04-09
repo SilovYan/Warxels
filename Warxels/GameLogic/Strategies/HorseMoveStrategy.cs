@@ -8,7 +8,7 @@
 
         public override StrategyResult Apply(UnitBase unit)
         {
-            if (unit.Power < unit.MoveCost * unit.GetTerrainPenalty(World.Terrain[unit.X, unit.Y]))
+            if (unit.Power < unit.MoveCost * unit.GetTerrainPenalty(World.GetTerrainType(unit.Y, unit.X)))
                 return StrategyResult.NotEnoughPower;
 
             var x = unit.X + _dx;

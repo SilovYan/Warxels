@@ -6,7 +6,7 @@
     internal sealed class World : IWorld
     {
         private readonly Army _army;
-        public byte[,] Terrain { get; }
+        public TerrainType[,] Terrain { get; }
 
         public World(int length, int width, Army army)
         {
@@ -14,7 +14,7 @@
             Length = length;
             Width = width;
             _projectiles = new HashSet<ProjectileBase>();
-            Terrain = new byte[width, length];
+            Terrain = new TerrainType[width, length];
         }
 
         public int Length { get; }
@@ -104,20 +104,10 @@
         {
             _projectiles.Add(arrow);
         }
-
-        public void SetTerrain(int y, int x, int y1, int x1, byte terrainType)
-        {
-            if (x < 0)
-                x = 0;
-
-            if (y < 0)
-                y = 0;
-
-            for (int i = x; i < x1 && i < Width; i++)
-                for (int j = y; j < y1 && j < Length; j++)
-                    Terrain[i, j] = terrainType;
-        }
-
         
+        public TerrainType GetTerrainType(int y, int x)
+        {
+            return Terrain[x, y];
+        }
     }
 }

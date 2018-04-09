@@ -38,7 +38,6 @@
             this.radioButtonGameSpeedNormal = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.comboBoxPreset = new System.Windows.Forms.ComboBox();
             this.buttonGenerateWorld = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxWorldY = new System.Windows.Forms.TextBox();
@@ -46,6 +45,9 @@
             this.textBoxWorldX = new System.Windows.Forms.TextBox();
             this.tabControlUnits = new System.Windows.Forms.TabControl();
             this.tabPageUnits = new System.Windows.Forms.TabPage();
+            this.buttonAddPreset = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.comboBoxPreset = new System.Windows.Forms.ComboBox();
             this.buttonUnitsLoad = new System.Windows.Forms.Button();
             this.buttonUnitsSave = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -202,7 +204,6 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.comboBoxPreset);
             this.groupBox4.Controls.Add(this.buttonGenerateWorld);
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.textBoxWorldY);
@@ -214,16 +215,6 @@
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Create world";
-            // 
-            // comboBoxPreset
-            // 
-            this.comboBoxPreset.FormattingEnabled = true;
-            this.comboBoxPreset.Items.AddRange(new object[] {
-            "1"});
-            this.comboBoxPreset.Location = new System.Drawing.Point(7, 75);
-            this.comboBoxPreset.Name = "comboBoxPreset";
-            this.comboBoxPreset.Size = new System.Drawing.Size(97, 21);
-            this.comboBoxPreset.TabIndex = 5;
             // 
             // buttonGenerateWorld
             // 
@@ -280,6 +271,9 @@
             // 
             // tabPageUnits
             // 
+            this.tabPageUnits.Controls.Add(this.buttonAddPreset);
+            this.tabPageUnits.Controls.Add(this.label3);
+            this.tabPageUnits.Controls.Add(this.comboBoxPreset);
             this.tabPageUnits.Controls.Add(this.buttonUnitsLoad);
             this.tabPageUnits.Controls.Add(this.buttonUnitsSave);
             this.tabPageUnits.Controls.Add(this.groupBox2);
@@ -292,6 +286,35 @@
             this.tabPageUnits.TabIndex = 0;
             this.tabPageUnits.Text = "Units";
             this.tabPageUnits.UseVisualStyleBackColor = true;
+            // 
+            // buttonAddPreset
+            // 
+            this.buttonAddPreset.Location = new System.Drawing.Point(600, 42);
+            this.buttonAddPreset.Name = "buttonAddPreset";
+            this.buttonAddPreset.Size = new System.Drawing.Size(150, 23);
+            this.buttonAddPreset.TabIndex = 9;
+            this.buttonAddPreset.Text = "Добавить юнитов";
+            this.buttonAddPreset.UseVisualStyleBackColor = true;
+            this.buttonAddPreset.Click += new System.EventHandler(this.buttonAddPreset_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(597, 15);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(44, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Пресет";
+            // 
+            // comboBoxPreset
+            // 
+            this.comboBoxPreset.FormattingEnabled = true;
+            this.comboBoxPreset.Items.AddRange(new object[] {
+            "1"});
+            this.comboBoxPreset.Location = new System.Drawing.Point(653, 8);
+            this.comboBoxPreset.Name = "comboBoxPreset";
+            this.comboBoxPreset.Size = new System.Drawing.Size(97, 21);
+            this.comboBoxPreset.TabIndex = 5;
             // 
             // buttonUnitsLoad
             // 
@@ -561,6 +584,7 @@
             this.groupBox4.PerformLayout();
             this.tabControlUnits.ResumeLayout(false);
             this.tabPageUnits.ResumeLayout(false);
+            this.tabPageUnits.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox5.ResumeLayout(false);
@@ -620,6 +644,8 @@
         private System.Windows.Forms.Button buttonTerrainSave;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem plotToolStripMenuItem;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button buttonAddPreset;
     }
 }
 

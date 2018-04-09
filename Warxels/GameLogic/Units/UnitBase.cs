@@ -35,11 +35,11 @@
 
         public abstract int MoveCost { get; }
 
-        public virtual float GetTerrainPenalty(byte terrainId)
+        public virtual float GetTerrainPenalty(TerrainType terrainType)
         {
-            switch (terrainId)
+            switch (terrainType)
             {
-                case 1: return 1.5f;
+                case TerrainType.Marsh: return 1.5f;
                 default: return 1;
             }
         }
@@ -92,15 +92,16 @@
         {
             return GetPositionKey(Y, X);
         }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetPositionKey(int y, int x)
         {
             return y * 3733 ^ x;
         }
 
-        public int GetMovementCost(Vector moveVector, byte terrainId)
+        public int GetMovementCost(Vector moveVector, TerrainType terrainType)
         {
-            var tempMoveCost = MoveCost * GetTerrainPenalty(terrainId);
+            var tempMoveCost = MoveCost * GetTerrainPenalty(terrainType);
             var length = moveVector.GetLengthSquared();
             if (length == 0)
             {

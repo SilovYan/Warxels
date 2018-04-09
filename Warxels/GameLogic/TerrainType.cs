@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace GameLogic
 {
-    public enum TerrainType
+    public enum TerrainType:byte
     {
         Ground = 0,
         Marsh = 1

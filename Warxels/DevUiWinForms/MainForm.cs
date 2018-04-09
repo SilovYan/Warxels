@@ -98,11 +98,11 @@ namespace DevUiWinForms
             int dX = ImageSizeX / world.Width;
             int dY = ImageSizeY / world.Length;
 
-            for (int i=0;i<world.Terrain.GetLength(0);i++)
-                for (int j=0;j<world.Terrain.GetLength(1); j++)
-                    switch (world.Terrain[i, j])
+            for (int i=0;i<world.Width;i++)
+                for (int j=0;j<world.Length; j++)
+                    switch (world.GetTerrainType(j,i))
                     {
-                        case 1: gfx.FillRectangle(MarshBrush, i * dX, j * dY, dX, dY);break;
+                        case TerrainType.Marsh: gfx.FillRectangle(MarshBrush, i * dX, j * dY, dX, dY);break;
                         default:break;
                     }
         }
@@ -239,16 +239,16 @@ namespace DevUiWinForms
         {
             if (!squareSelection)
             {
-                var coords1 = ControlCoordsToWorldCoords(squareBegin.X, squareBegin.Y);
+                var coords1 = ControlCoordsToWorldCoords(e.X, e.Y);
                 var size = int.Parse(textBoxTerrainBrushSize.Text);
-                World.SetTerrain(coords1.Y, coords1.X, coords1.Y+size, coords1.X+size, (byte)comboBoxTerrain.SelectedIndex);
+                WorldGen.SetTerrain(coords1.Y, coords1.X, coords1.Y+size, coords1.X+size, (TerrainType)comboBoxTerrain.SelectedIndex);
             }
             else
             {
                 var coords1 = ControlCoordsToWorldCoords(squareBegin.X, squareBegin.Y);
                 var coords2 = ControlCoordsToWorldCoords(squareEnd.X, squareEnd.Y);
 
-                World.SetTerrain(coords1.Y, coords1.X, coords2.Y, coords2.X, (byte)comboBoxTerrain.SelectedIndex);
+                WorldGen.SetTerrain(coords1.Y, coords1.X, coords2.Y, coords2.X, (TerrainType)comboBoxTerrain.SelectedIndex);
             }
         }
 
@@ -334,7 +334,7 @@ namespace DevUiWinForms
             {
                 var coords1 = ControlCoordsToWorldCoords(e.X, e.Y);
                 var size = int.Parse(textBoxTerrainBrushSize.Text);
-                World.SetTerrain(coords1.Y, coords1.X, coords1.Y + size, coords1.X + size, (byte)comboBoxTerrain.SelectedIndex);
+                WorldGen.SetTerrain(coords1.Y, coords1.X, coords1.Y + size, coords1.X + size, (TerrainType)comboBoxTerrain.SelectedIndex);
             }
             else
             {
@@ -356,12 +356,9 @@ namespace DevUiWinForms
         {
             int x = Int32.Parse(textBoxWorldX.Text);
             int y = Int32.Parse(textBoxWorldY.Text);
-
-            if (comboBoxPreset.SelectedIndex == -1)
-                WorldGen = WorldsGenerator.GetDefault(y, x);
-            else
-                WorldGen = WorldsGenerator.CreatePreset(y, x);
-
+            
+            WorldGen = WorldsGenerator.GetDefault(y, x);
+            
             var world = WorldGen.GetWorld();
             SetWorld(world);
             SetPaused(true);
@@ -431,8 +428,6 @@ namespace DevUiWinForms
             }
         }
 
-        
-
         private void buttonTerrainLoad_Click(object sender, EventArgs e)
         {
             var dialog = new OpenFileDialog();
@@ -472,6 +467,11 @@ namespace DevUiWinForms
                 @"Первые лучи рассветного солнца нежно скользнули по верхушкам монументальных гор в долине и поползли вниз по отвесным скалам и стволам деревьев, снимая с них сумеречную вуаль и открывая их миру. Лучи солнца освещали эти древние земли, секунда за секундой открывая больше деталей. Вот бурлящие воды быстрой горной реки, пересекающей долину. Вот оживленная заводь, прибрежная топь и виднеется камыш. Вот иссеченные латы, заляпанные кровью мечи и угрюмые взгляды, пронзающие рассветную дымку.
 И они узрели. Рассветное небо посерело от урагана стрел, обрушившегося на первые ряды пехотинцев. Лишь утерев кровь павших товарищей с лиц, воины смогли увидеть монолитную стену врагов, надвигающихся на них с противоположной стороны реки. Лица их были перекошены, а синие флаги остервенело трепетали на ветру.
 — Вперед! - боевой клич вознесся над полем брани и предопределил судьбу чужеземцев. Кони рванулись в бой под алыми, как этот роковой рассвет, флагами великого королевства, лучники натянули тетиву и пехотинцы загремели, смертоносной стеной двигаясь навстречу вечности.");
+        }
+
+        private void buttonAddPreset_Click(object sender, EventArgs e)
+        {
+            WorldGen.AddPresetUnits();
         }
     }
 }
