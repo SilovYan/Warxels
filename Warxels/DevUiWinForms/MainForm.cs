@@ -31,11 +31,13 @@ namespace DevUiWinForms
         private static IWorld World;
         private WorldsGenerator WorldGen;
         private readonly Graphics _gfx;
+        private readonly Graphics _gfxBack;
 
         private const int ImageSizeX = 1024;
         private const int ImageSizeY = 1024;
 
         private static readonly Image image = new Bitmap(ImageSizeX, ImageSizeY);
+        private static readonly Image backgroundImage = new Bitmap(ImageSizeX, ImageSizeY);
 
         public MainForm()
         {
@@ -48,7 +50,8 @@ namespace DevUiWinForms
             SetWorld(WorldGen.GetWorld());
 
             _gfx = Graphics.FromImage(image);
-
+            _gfxBack = Graphics.FromImage(backgroundImage);
+            UpdateBackgroundImage();
             UpdateDrawMode();
             
         }
@@ -58,6 +61,12 @@ namespace DevUiWinForms
             World = world;
         }
 
+        private void UpdateBackgroundImage()
+        {
+            _gfxBack.Clear(Color.White);
+            DrawGrid(_gfxBack, World);
+            DrawTerrain(_gfxBack, World);
+        }
 
         private void Render()
         {
@@ -70,9 +79,7 @@ namespace DevUiWinForms
 
                 {
                     _gfx.Clear(Color.White);
-
-                    DrawGrid(_gfx, world);
-                    DrawTerrain(_gfx, world);
+                    _gfx.DrawImage(backgroundImage, 0, 0);
                     DrawUnits(_gfx, world);
                     DrawProjectiles(_gfx, world);
 
@@ -117,8 +124,7 @@ namespace DevUiWinForms
                 gfx.DrawEllipse(ProjectilePen, projectile.X * dX, projectile.Y * dY, dX/2 , dY/2);
             }
         }
-
-
+        
         private Pen[] TeamAPens = new Pen[] {
             new Pen(Color.FromArgb(50, Color.Red)),
             new Pen(Color.FromArgb(100, Color.Red)),
@@ -249,6 +255,7 @@ namespace DevUiWinForms
                 var coords2 = ControlCoordsToWorldCoords(squareEnd.X, squareEnd.Y);
 
                 WorldGen.SetTerrain(coords1.Y, coords1.X, coords2.Y, coords2.X, (TerrainType)comboBoxTerrain.SelectedIndex);
+                UpdateBackgroundImage();
             }
         }
 
@@ -335,6 +342,7 @@ namespace DevUiWinForms
                 var coords1 = ControlCoordsToWorldCoords(e.X, e.Y);
                 var size = int.Parse(textBoxTerrainBrushSize.Text);
                 WorldGen.SetTerrain(coords1.Y, coords1.X, coords1.Y + size, coords1.X + size, (TerrainType)comboBoxTerrain.SelectedIndex);
+                UpdateBackgroundImage();
             }
             else
             {
@@ -360,7 +368,10 @@ namespace DevUiWinForms
             WorldGen = WorldsGenerator.GetDefault(y, x);
             
             var world = WorldGen.GetWorld();
+            
             SetWorld(world);
+            UpdateBackgroundImage();
+
             SetPaused(true);
         }
 
