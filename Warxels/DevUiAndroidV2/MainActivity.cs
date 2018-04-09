@@ -15,7 +15,6 @@ namespace DevUiAndroidV2
         {
             base.OnCreate(savedInstanceState);
 
-            // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
             _startGameButton = FindViewById<Button>(Resource.Id.startGameButton);
             _startGameButton.Click += MainActivity_Click;

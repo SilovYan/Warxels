@@ -5,7 +5,6 @@ using Android.Views;
 using Android.Widget;
 using GameLogic;
 using GameLogic.Helper;
-using Java.Util;
 using Xamarin.Forms;
 using Button = Android.Widget.Button;
 using View = Android.Views.View;
@@ -21,9 +20,8 @@ namespace DevUiAndroidV2
         private TextView _totalInSquadEditText;
         private TextView _rowText;
         private TextView _rankText;
-        private LinearLayout _topLayout;
-        private LinearLayout _cocosLayout;
-        private WorldsGenerator WorldGen;
+        private LinearLayout _armyLayout;
+        private WorldsGenerator _worldGen;
         private Button _somethingButton;
         private MyView _view;
         private Spinner _spinner;
@@ -39,13 +37,10 @@ namespace DevUiAndroidV2
             _totalInSquadEditText = FindViewById<TextView>(Resource.Id.totalInSquad);
             _rowText = FindViewById<TextView>(Resource.Id.rowText);
             _rankText = FindViewById<TextView>(Resource.Id.rankText);
-            _topLayout = FindViewById<LinearLayout>(Resource.Id.topLayout);
-            _cocosLayout = FindViewById<LinearLayout>(Resource.Id.cocosLayout);
+            _armyLayout = FindViewById<LinearLayout>(Resource.Id.armyLayout);
             _spinner = FindViewById<Spinner>(Resource.Id.squadTypeSpinner);
-            _view = new MyView(_cocosLayout.Context);
-            _cocosLayout.AddView(_view);
-            _rowsSeekBar.Max = 15;
-            _rankSeekBar.Max = 15;
+            _view = new MyView(_armyLayout.Context);
+            _armyLayout.AddView(_view);
             _rowsSeekBar.ProgressChanged += _rankSeekBar_ProgressChanged;
             _rankSeekBar.ProgressChanged += _rankSeekBar_ProgressChanged;
             _somethingButton.Click += _somethingButton_Click;
@@ -54,18 +49,18 @@ namespace DevUiAndroidV2
             Forms.Init(this, savedInstanceState);
             if (Intent.GetBooleanExtra("ISLOAD", false))
             {
-                WorldGen = WorldsGenerator.GetDefault(MyView.SIZE * 3 / 2, MyView.SIZE);
-                if (WorldGen.GetWorld().Width != MyView.SIZE)
-                    WorldGen = null;
+                _worldGen = WorldsGenerator.GetDefault(MyView.Size * 3 / 2, MyView.Size);
+                if (_worldGen.GetWorld().Width != MyView.Size)
+                    _worldGen = null;
                 else
                 {
                     try
                     {
-                        WorldGen.LoadUnitsFromFile("units.units", true);
+                        _worldGen.LoadUnitsFromFile("units.units", true);
                     }
                     catch 
                     {
-                        WorldGen = null;
+                        _worldGen = null;
                     }
                 }
             }
@@ -74,9 +69,9 @@ namespace DevUiAndroidV2
 
         private void _view_Touch(object sender, View.TouchEventArgs e)
         {
-            if (WorldGen != null)
+            if (_worldGen != null)
             {
-                _view.SetLoadedWorld(WorldGen.GetWorld());
+                _view.SetLoadedWorld(_worldGen.GetWorld());
                 _view.Touch -= _view_Touch;
                 return;
             }
@@ -114,9 +109,15 @@ namespace DevUiAndroidV2
             return UnitType.SwordsMan;
         }
 
-        private void _somethingButton_Click(object sender, System.EventArgs e)
+        private void _somethingButton_Click(object sender, EventArgs e)
         {
-            var view = new BattleView(this, WorldGen == null ? _view.Army.GenerateWorld() : WorldGen.GetWorld());
+            var view = new BattleView(this, _worldGen == null ? _view.Army.GenerateWorld() : _worldGen.GetWorld());
+
+            if (_worldGen == null)
+            {
+                view.World.SaveUnits("units.units", true);
+                view.World.SaveTerrain("terr.terr", true);
+            }
 
             SetContentView(view);
 
@@ -127,9 +128,6 @@ namespace DevUiAndroidV2
                     ShowResults(view);
                 return !view.EndGame;
             });
-
-            view.World.SaveUnits("units.units", true);
-            view.World.SaveTerrain("terr.terr", true);
         }
         
         public void StartTimer(TimeSpan interval, Func<bool> callback)
@@ -154,13 +152,13 @@ namespace DevUiAndroidV2
             var army = _view.Army.MaxSizeArmy - _view.Army.Size;
             if (sender == _rowsSeekBar)
             {
-                _rankSeekBar.Max = Math.Min(army / (_rowsSeekBar.Progress == 0 ? 1 : _rowsSeekBar.Progress), MyView.SIZE / 2);
+                _rankSeekBar.Max = Math.Min(army / (_rowsSeekBar.Progress == 0 ? 1 : _rowsSeekBar.Progress), MyView.Size / 2);
                 _rankSeekBar.Progress = Math.Min(_rankSeekBar.Max, _rankSeekBar.Progress);
                 _rowText.Text = "Число рядов: " + _rowsSeekBar.Progress;
             }
             else
             {
-                _rowsSeekBar.Max = Math.Min(army / (_rankSeekBar.Progress == 0 ? 1 : _rankSeekBar.Progress), MyView.SIZE);
+                _rowsSeekBar.Max = Math.Min(army / (_rankSeekBar.Progress == 0 ? 1 : _rankSeekBar.Progress), MyView.Size);
                 _rowsSeekBar.Progress = Math.Min(_rowsSeekBar.Max, _rowsSeekBar.Progress);
                 _rankText.Text = "Число шеренг: " + _rankSeekBar.Progress;
             }

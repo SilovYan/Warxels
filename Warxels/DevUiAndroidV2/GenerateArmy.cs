@@ -4,9 +4,9 @@ using GameLogic;
 
 namespace DevUiAndroidV2
 {
-    class GenerateArmy
+    internal class GenerateArmy
     {
-        private List<ISquad> _squads = new List<ISquad>();
+        private readonly List<ISquad> _squads = new List<ISquad>();
         public List<ISquad> GetSquads()
         {
             return _squads;
@@ -27,8 +27,8 @@ namespace DevUiAndroidV2
 
         public bool CheckSquad(ISquad squad)
         {
-            var inWorldSpace = squad.MinX >= 0 && squad.MaxX < MyView.SIZE
-                               && squad.MinY >= MyView.SIZE / 2 && squad.MaxY < MyView.SIZE;
+            var inWorldSpace = squad.MinX >= 0 && squad.MaxX < MyView.Size
+                               && squad.MinY >= MyView.Size / 2 && squad.MaxY < MyView.Size;
             return inWorldSpace && (_squads.Count == 0 || _squads.All(val => squad == val
                                     || val.MaxX < squad.MinX || val.MinX > squad.MaxX
                                      || val.MinY > squad.MaxY || val.MaxY < squad.MinY));
@@ -36,14 +36,14 @@ namespace DevUiAndroidV2
 
         public IWorld GenerateWorld()
         {
-            var generator = WorldsGenerator.GetDefault(MyView.SIZE * 3 / 2, MyView.SIZE);
+            var generator = WorldsGenerator.GetDefault(MyView.Size * 3 / 2, MyView.Size);
             foreach (var s in _squads)
             {
                 for (var x = s.MinX; x < s.MaxX; x++)
                 {
                     for (var y = s.MinY; y < s.MaxY; y++)
                     {
-                        generator.CreateUnit(s.Type, s.Team, y + MyView.SIZE / 2, x);
+                        generator.CreateUnit(s.Type, s.Team, y + MyView.Size / 2, x);
                     }
                 }
             }

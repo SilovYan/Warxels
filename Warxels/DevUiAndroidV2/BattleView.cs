@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Android.Content;
 using Android.Graphics;
 using Android.Views;
@@ -12,17 +11,17 @@ namespace DevUiAndroidV2
         public bool EndGame => _lastMoveAgo > 50;
         public int Delay { get; } = 10;
         public IWorld World { get; }
-        private const int SIZE = MyView.SIZE;
-        private int _lastMoveAgo=0;
-        private int step;
-        private Paint marshPaint = new Paint { Color = new Color(0, 0, 255, 64) };
-        private Paint projectilePen = new Paint { Color = Color.Brown };
+        private const int Size = MyView.Size;
+        private int _lastMoveAgo;
+        private int _step;
+        private readonly Paint _marshPaint = new Paint { Color = new Color(0, 0, 255, 64) };
+        private readonly Paint _projectilePen = new Paint { Color = Color.Brown };
 
-        public int CountBlueDead { get; private set; } = 0;
-        public int CountRedDead { get; private set; } = 0;
+        public int CountBlueDead { get; private set; }
+        public int CountRedDead { get; private set; }
 
 
-        private Paint[] TeamAPens = new Paint[] {
+        private readonly Paint[] _teamAPens = {
             new Paint{Color = Color.Red, Alpha = 50},
             new Paint{Color = Color.Red, Alpha = 100},
             new Paint{Color = Color.Red, Alpha = 150},
@@ -30,7 +29,7 @@ namespace DevUiAndroidV2
             new Paint{Color = Color.Red, Alpha = 255}
         };
 
-        private Paint[] TeamBPens = new Paint[] {
+        private readonly Paint[] _teamBPens = {
             new Paint{Color = Color.Blue, Alpha = 50},
             new Paint{Color = Color.Blue, Alpha = 100},
             new Paint{Color = Color.Blue, Alpha = 150},
@@ -38,7 +37,7 @@ namespace DevUiAndroidV2
             new Paint{Color = Color.Blue, Alpha = 255}
         };
 
-        private Paint[] TeamASolidPens = new Paint[] {
+        private readonly Paint[] _teamASolidPens = {
             new Paint{Color = Color.Red, Alpha = 50},
             new Paint{Color = Color.Red, Alpha = 100},
             new Paint{Color = Color.Red, Alpha = 150},
@@ -46,7 +45,7 @@ namespace DevUiAndroidV2
             new Paint{Color = Color.Red, Alpha = 255}
         };
 
-        private Paint[] TeamBSolidPens = new Paint[] {
+        private readonly Paint[] _teamBSolidPens = {
             new Paint{Color = Color.Blue, Alpha = 50},
             new Paint{Color = Color.Blue, Alpha = 100},
             new Paint{Color = Color.Blue, Alpha = 150},
@@ -57,20 +56,20 @@ namespace DevUiAndroidV2
         public BattleView(Context context, IWorld world) : base(context)
         {
             World = world;
-            foreach (var p in TeamASolidPens)
+            foreach (var p in _teamASolidPens)
             {
                 p.SetStyle(Paint.Style.Fill);
             }
-            foreach (var p in TeamBSolidPens)
+            foreach (var p in _teamBSolidPens)
             {
                 p.SetStyle(Paint.Style.Fill);
             }
 
-            foreach (var p in TeamAPens)
+            foreach (var p in _teamAPens)
             {
                 p.SetStyle(Paint.Style.Stroke);
             }
-            foreach (var p in TeamBPens)
+            foreach (var p in _teamBPens)
             {
                 p.SetStyle(Paint.Style.Stroke);
             }
@@ -78,16 +77,15 @@ namespace DevUiAndroidV2
 
         private void DrawTerrain(Canvas canvas)
         {
-            for (int i = 0; i < World.Terrain.GetLength(0); i++)
+            for (int i = 0; i < World.Length; i++)
             {
-                for (int j = 0; j < World.Terrain.GetLength(1); j++)
+                for (int j = 0; j < World.Width; j++)
                 {
-                    switch (World.Terrain[i, j])
+                    switch (World.GetTerrainType(i,j))
                     {
-                        case 1:
-                            canvas.DrawRect(i * step, j * step, (i + 1) * step, (j + 1) * step, marshPaint);
+                        case TerrainType.Marsh:
+                            canvas.DrawRect(i * _step, j * _step, (i + 1) * _step, (j + 1) * _step, _marshPaint);
                             break;
-                        default: break;
                     }
                 }
             }
@@ -100,11 +98,11 @@ namespace DevUiAndroidV2
                 switch (unit.UnitType)
                 {
                     case UnitType.SwordsMan:
-                        canvas.DrawOval(unit.X * step, unit.Y * step, (unit.X + 1) * step, (unit.Y + 1) * step, unit.Team == Team.Red ? TeamAPens[healthPercentageIndex] : TeamBPens[healthPercentageIndex]); break;
+                        canvas.DrawOval(unit.X * _step, unit.Y * _step, (unit.X + 1) * _step, (unit.Y + 1) * _step, unit.Team == Team.Red ? _teamAPens[healthPercentageIndex] : _teamBPens[healthPercentageIndex]); break;
                     case UnitType.HorseMan:
-                        canvas.DrawRect(unit.X * step, unit.Y * step, (unit.X + 1) * step, (unit.Y + 1) * step, unit.Team == Team.Red ? TeamAPens[healthPercentageIndex] : TeamBPens[healthPercentageIndex]); break;
+                        canvas.DrawRect(unit.X * _step, unit.Y * _step, (unit.X + 1) * _step, (unit.Y + 1) * _step, unit.Team == Team.Red ? _teamAPens[healthPercentageIndex] : _teamBPens[healthPercentageIndex]); break;
                     case UnitType.Archer:
-                        canvas.DrawOval(unit.X * step, unit.Y * step, (unit.X + 1) * step, (unit.Y + 1) * step, unit.Team == Team.Red ? TeamASolidPens[healthPercentageIndex] : TeamBSolidPens[healthPercentageIndex]); break;
+                        canvas.DrawOval(unit.X * _step, unit.Y * _step, (unit.X + 1) * _step, (unit.Y + 1) * _step, unit.Team == Team.Red ? _teamASolidPens[healthPercentageIndex] : _teamBSolidPens[healthPercentageIndex]); break;
                 }
             }
         }
@@ -113,14 +111,14 @@ namespace DevUiAndroidV2
         {
             foreach (var projectile in World.GetProjectiles())
             {
-                canvas.DrawOval(projectile.X * step, projectile.Y * step, projectile.X * step + step / 2.0f,
-                    projectile.Y * step + step / 2.0f, projectilePen);
+                canvas.DrawOval(projectile.X * _step, projectile.Y * _step, projectile.X * _step + _step / 2.0f,
+                    projectile.Y * _step + _step / 2.0f, _projectilePen);
             }
         }
 
         public override void Draw(Canvas canvas)
         {
-            step = Right / SIZE;
+            _step = Right / Size;
 
             if (!EndGame)
             {
