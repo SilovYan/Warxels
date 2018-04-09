@@ -89,8 +89,8 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 88.48485F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.51515F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 125F));
             this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.tabControlUnits, 0, 1);
@@ -98,8 +98,8 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 81.73431F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18.26568F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 125F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1114, 700);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -108,7 +108,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(979, 566);
+            this.pictureBox1.Size = new System.Drawing.Size(983, 569);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
@@ -122,9 +122,9 @@
             this.flowLayoutPanel1.Controls.Add(this.groupBox4);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(988, 3);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(992, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(123, 566);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(119, 569);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // groupBox3
@@ -136,6 +136,7 @@
             this.groupBox3.Controls.Add(this.radioButtonGameSpeedNormal);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox3.Location = new System.Drawing.Point(3, 3);
+            this.groupBox3.MinimumSize = new System.Drawing.Size(104, 87);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(104, 87);
             this.groupBox3.TabIndex = 2;
@@ -262,7 +263,8 @@
             // 
             this.tabControlUnits.Controls.Add(this.tabPageUnits);
             this.tabControlUnits.Controls.Add(this.tabPageTerrain);
-            this.tabControlUnits.Location = new System.Drawing.Point(3, 575);
+            this.tabControlUnits.Location = new System.Drawing.Point(3, 578);
+            this.tabControlUnits.MinimumSize = new System.Drawing.Size(979, 100);
             this.tabControlUnits.Name = "tabControlUnits";
             this.tabControlUnits.SelectedIndex = 0;
             this.tabControlUnits.Size = new System.Drawing.Size(979, 100);
