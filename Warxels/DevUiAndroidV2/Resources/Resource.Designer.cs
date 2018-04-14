@@ -63,11 +63,11 @@ namespace DevUiAndroidV2
 			// aapt resource value: 0x7f050007
 			public const int BottomLayout = 2131034119;
 			
+			// aapt resource value: 0x7f050006
+			public const int armyLayout = 2131034118;
+			
 			// aapt resource value: 0x7f050000
 			public const int battleView = 2131034112;
-			
-			// aapt resource value: 0x7f050006
-			public const int cocosLayout = 2131034118;
 			
 			// aapt resource value: 0x7f050005
 			public const int doSomethingButton = 2131034117;

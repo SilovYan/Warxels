@@ -3,43 +3,42 @@ using GameLogic;
 
 namespace DevUiAndroidV2
 {
-    class RectSquad : ISquad
+    internal class RectSquad : ISquad
     {
-        private UnitType _type;
-        private int _x;
-        private int _y;
-        private int _xMin;
-        private int _yMin;
-        private Team _team;
+        private readonly int _x;
+        private readonly int _y;
 
         public RectSquad(int x, int y, UnitType type, Team team, int xMin, int yMin)
         {
             _x = x;
             _y = y;
-            _xMin = xMin;
-            _yMin = yMin;
-            _type = type;
-            _team = team;
+            MinX = xMin;
+            MinY = yMin;
+            Type = type;
+            Team = team;
         }
         
-        public int MinX => _xMin;
-        public int MaxX => _xMin+_x;
-        public int MinY => _yMin;
-        public int MaxY => _yMin+_y;
+        public int MinX { get; private set; }
+
+        public int MaxX => MinX + _x;
+        public int MinY { get; private set; }
+
+        public int MaxY => MinY + _y;
 
         public int Size => _x * _y;
-        public UnitType Type => _type;
-        public Team Team => _team;
+
+        public UnitType Type { get; }
+        public Team Team { get; }
 
         public bool CheckAndSetPos(GenerateArmy army, int x, int y)
         {
-            var tempX = _xMin;
-            var tempY = _yMin;
-            _xMin = x;
-            _yMin = y;
+            var tempX = MinX;
+            var tempY = MinY;
+            MinX = x;
+            MinY = y;
             var canAdded = army.CheckSquad(this);
-            _xMin = canAdded ? _xMin : tempX;
-            _yMin = canAdded ? _yMin : tempY;
+            MinX = canAdded ? MinX : tempX;
+            MinY = canAdded ? MinY : tempY;
             return canAdded;
         }
         public IEnumerable<IUnit> GetUnits()

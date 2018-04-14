@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace GameLogic.Helper
@@ -25,7 +24,7 @@ namespace GameLogic.Helper
 
                 builder.Append(Environment.NewLine);
             }
-            System.IO.File.WriteAllText(fname, builder.ToString(), Encoding.Unicode);
+            File.WriteAllText(fname, builder.ToString(), Encoding.Unicode);
         }
 
         public static void SaveUnits(this IWorld world, string fname, bool android = false)
@@ -42,11 +41,10 @@ namespace GameLogic.Helper
             }
             if (android) {
                 var path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                fname = Path.Combine(path.ToString(), fname);               
+                fname = Path.Combine(path, fname);               
             }
 
-            var str = builder.ToString().Where(c => c != ' ' && c != '\n');
-            System.IO.File.WriteAllText(fname, builder.ToString(), Encoding.Unicode);
+            File.WriteAllText(fname, builder.ToString(), Encoding.Unicode);
         }
 
 
@@ -81,35 +79,35 @@ namespace GameLogic.Helper
                 fname = Path.Combine(path, fname);
             }
 
-            var lines = System.IO.File.ReadAllLines(fname, Encoding.Unicode);
+            var lines = File.ReadAllLines(fname, Encoding.Unicode);
             
             var width = lines[0].Length;
             var height = lines.Length;
 
-            var WorldGen = WorldsGenerator.GetDefault(height, width);
-            var World = WorldGen.GetWorld();
+            var worldGen = WorldsGenerator.GetDefault(height, width);
+            var world = worldGen.GetWorld();
 
             int y = 0;
 
             foreach (var line in lines)
             {
                 int x = 0;
-                if (x >= World.Length)
+                if (x >= world.Length)
                     break;
 
                 foreach (var c in line)
                 {
-                    if (x >= World.Width)
+                    if (x >= world.Width)
                         break;
 
                     if (c == 'm')
-                        WorldGen.SetTerrain(y, x, TerrainType.Marsh);
+                        worldGen.SetTerrain(y, x, TerrainType.Marsh);
                     x++;
                 }
                 y++;
             }
 
-            return WorldGen;
+            return worldGen;
         }
 
 
@@ -121,12 +119,10 @@ namespace GameLogic.Helper
                 fname = Path.Combine(path, fname);
             }
 
-            var lines = System.IO.File.ReadAllLines(fname,Encoding.Unicode);
+            var lines = File.ReadAllLines(fname,Encoding.Unicode);
             if (lines.Length < 0)
                 return;
 
-            var width = lines[0].Length;
-            var height = lines.Length;
             var world = worldGen.GetWorld();
             world.Army.Clear();
 
@@ -135,12 +131,12 @@ namespace GameLogic.Helper
             foreach (var line in lines)
             {
                 int x = 0;
-                if (y >= world.Width)
+                if (y >= world.Length)
                     break;
 
                 foreach (var c in line)
                 {
-                    if (x >= world.Length)
+                    if (x >= world.Width)
                         break;
                     
                     switch (c)
