@@ -77,8 +77,8 @@ namespace DevUiWinForms
 
         private void DrawTerrain(Graphics gfx, IWorld world)
         {
-            int dX = ImageSizeX / world.Width;
-            int dY = ImageSizeY / world.Length;
+            var dX = (float)ImageSizeX / world.Width;
+            var dY = (float)ImageSizeY / world.Length;
 
             for (int i = 0; i < world.Width; i++)
                 for (int j = 0; j < world.Length; j++)
@@ -91,8 +91,8 @@ namespace DevUiWinForms
 
         private void DrawProjectiles(Graphics gfx, IWorld world)
         {
-            int dX = ImageSizeX / world.Width;
-            int dY = ImageSizeY / world.Length;
+            float dX = (float)ImageSizeX / world.Width;
+            float dY = (float)ImageSizeY / world.Length;
 
             foreach (var projectile in world.GetProjectiles())
             {
@@ -134,8 +134,8 @@ namespace DevUiWinForms
 
         private void DrawUnits(Graphics gfx, IWorld world)
         {
-            int dX = ImageSizeX / world.Width;
-            int dY = ImageSizeY / world.Length;
+            float dX = (float)ImageSizeX / world.Width;
+            float dY = (float)ImageSizeY / world.Length;
 
             foreach (var unit in world.Army.GetUnits())
             {
@@ -155,15 +155,15 @@ namespace DevUiWinForms
 
         private void DrawGrid(Graphics gfx, IWorld world)
         {
-            int stepX = ImageSizeX / world.Width;
-            int stepY = ImageSizeY / world.Length;
+            float stepX = (float)ImageSizeX / world.Width;
+            float stepY = (float)ImageSizeY / world.Length;
 
-            for (int x = 0; x < ImageSizeX; x += stepX)
+            for (float x = 0; x < ImageSizeX; x += stepX)
             {
                 gfx.DrawLine(Pen, x, 0, x, ImageSizeY);
             }
 
-            for (int y = 0; y < ImageSizeY; y += stepY)
+            for (float y = 0; y < ImageSizeY; y += stepY)
             {
                 gfx.DrawLine(Pen, 0, y, ImageSizeX, y);
             }

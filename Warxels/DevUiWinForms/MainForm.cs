@@ -115,7 +115,7 @@ namespace DevUiWinForms
 
         private Point ControlCoordsToWorldCoords(int x, int y)
         {
-            return new Point(x * World.Width / pictureBox1.Width, y * World.Length / pictureBox1.Height);
+            return new Point(World.Width * x / pictureBox1.Width, World.Length * y / pictureBox1.Height);
         }
 
         
@@ -127,6 +127,7 @@ namespace DevUiWinForms
                 if (e.Button == MouseButtons.Left)
                 {
                     var coords = ControlCoordsToWorldCoords(e.X, e.Y);
+                    
                     AddUnit(_radioTeamA.Checked ? Team.Red : Team.Blue, coords.X, coords.Y);
                 }
             }
